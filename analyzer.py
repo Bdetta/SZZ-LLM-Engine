@@ -1,47 +1,50 @@
 import os
-from openai import OpenAI
+from openai import OpenAI # Usiamo la stessa libreria!
 from dotenv import load_dotenv
 
-# Carica la chiave dal file .env
+# Carica le variabili (non serve più la chiave, ma lasciamo il caricamento)
 load_dotenv()
 
-# Configura il client OpenAI
-try:
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-except Exception as e:
-    print(f"Errore configurazione API Key: {e}")
+# --- MODIFICA FONDAMENTALE PER OLLAMA ---
+# Invece di collegarsi a internet, ci colleghiamo al tuo PC
+client = OpenAI(
+    base_url="http://localhost:11434/v1",  # Indirizzo di Ollama
+    api_key="ollama",                      # Chiave finta (obbligatoria ma ignorata)
+)
 
 def analyze_commit(message, diff):
-    """
-    Funzione che chiede all'LLM se un commit è un vero bug fix.
-    """
-    print("⏳ Chiedo all'IA...")
+    print("⏳ Chiedo a Qwen (Locale)...") # Ho cambiato il testo per chiarezza
     
+    # Prompt ottimizzato per modelli locali
     prompt = f"""
-    Analizza questo commit Git.
-    Messaggio: "{message}"
-    Diff (Modifiche):
+    Sei un esperto di Software Engineering. Analizza il seguente commit.
+    
+    Commit Message: "{message}"
+    
+    Diff:
     {diff}
     
-    Domanda: Questo commit risolve un bug logico nel codice?
-    Rispondi con un JSON: {{"is_bug_fix": true/false, "reason": "breve spiegazione"}}
+    Compito: Il commit risolve un bug?
+    Rispondi SOLO in formato JSON valido:
+    {{
+        "is_bug_fix": true/false,
+        "reason": "breve spiegazione in italiano"
+    }}
     """
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
+            model="qwen2.5-coder:7b", # Specifichiamo il modello che hai scaricato
+            messages=[
+                {"role": "system", "content": "Sei un assistente che risponde solo in JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.1, # Bassa temperatura per risposte più logiche
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"Errore durante la chiamata API: {e}"
+        return f"Errore Locale: {e}"
 
-# --- TEST LOCALE ---
+# --- TEST ---
 if __name__ == "__main__":
-    # Testiamo con dati finti per vedere se funziona
-    fake_msg = "Fixed division by zero"
-    fake_diff = "+ if b == 0: return 0\n+ return a / b"
-    
-    risultato = analyze_commit(fake_msg, fake_diff)
-    print("\n--- RISULTATO ---")
-    print(risultato)
+    print(analyze_commit("fix null pointer exception", "if (x != null) { ... }"))

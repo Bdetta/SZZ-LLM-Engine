@@ -1,0 +1,27 @@
+[
+    {
+        "hash": "75b499dd046060021db0c7a772dd34df9374a30b",
+        "msg": "sample test fixtures (none)",
+        "llm_verdict": "```json\n{\n    \"is_bug_fix\": false,\n    \"reason\": \"Il commit crea solo un file di test vuoto e non risolve alcun bug.\"\n}\n```"
+    },
+    {
+        "hash": "32cc197a81502c30715c9e164006dce6debcd1bf",
+        "msg": "fixes",
+        "llm_verdict": "```json\n{\n    \"is_bug_fix\": false,\n    \"reason\": \"Il commit non contiene informazioni su quale bug venga risolto. Il messaggio del commit \u00e8 'fixes' ma non c'\u00e8 ulteriore descrizione del problema corretto.\"\n}\n```"
+    },
+    {
+        "hash": "3c32045da05cda554e65d3b943bb1128b2482c7f",
+        "msg": "FIXED",
+        "llm_verdict": "```json\n{\n    \"is_bug_fix\": true,\n    \"reason\": \"Il commit aggiunge il metodo 'DELETE' alla lista dei metodi supportati, che era mancante prima.\"\n}\n```"
+    },
+    {
+        "hash": "4a3f55997bc73d9ff8312cfae68a028728b49f66",
+        "msg": "a few test fixtures for now",
+        "llm_verdict": "```json\n{\n    \"is_bug_fix\": false,\n    \"reason\": \"Il commit aggiunge solo alcuni test fixture per la libreria requests, non risolve un bug.\"\n}\n```"
+    },
+    {
+        "hash": "4c8b428bbd3800cafa0e3764512eb719f67315f0",
+        "msg": "except clause fix for python3",
+        "llm_verdict": "{\n    \"is_bug_fix\": true,\n    \"reason\": \"Il commit aggiorna la sintassi dell'eccezione per essere compatibile con Python 3, risolvendo un problema potenziale di incompatibilit\u00e0.\"\n}"
+    }
+]
