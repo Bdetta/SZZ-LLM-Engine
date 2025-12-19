@@ -41,7 +41,11 @@ def analyze_commit(message, diff):
             ],
             temperature=0.1, # Bassa temperatura per risposte più logiche
         )
-        return response.choices[0].message.content
+        # PULIZIA DELLA STRINGA:
+        content = response.choices[0].message.content
+        # Rimuoviamo i backticks se l'IA li ha messi
+        clean_content = content.replace("```json", "").replace("```", "").strip()
+        return clean_content
     except Exception as e:
         return f"Errore Locale: {e}"
 
